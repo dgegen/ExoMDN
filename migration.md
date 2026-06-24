@@ -71,6 +71,17 @@ Bumping sklearn also raises a pickle-compat concern: loading the existing pickle
   3. Raise `requires-python` upper bound.
   4. Resolve scikit-learn/numpy ABI conflict and re-pickle preprocessors (see scikit-learn analysis).
 
+## DONE: migrated to `tensorflow==2.21.*` / `tensorflow-probability==0.25.*`
+
+All four blockers above are resolved:
+
+1. Both `models/*/model.keras` already existed and were re-verified to load and predict correctly under TF 2.21/Keras 3 (native, no `TF_USE_LEGACY_KERAS` needed).
+2. Added `tf-keras==2.21.*` — confirmed required (TFP's environment validation imports `tf_keras` as soon as `tensorflow` is also imported, even though the `.keras` models themselves load fine natively under Keras 3 without it).
+3. Raised `requires-python` to `>=3.10,<3.14` (latest `tensorflow`/`tf-keras` require `python>=3.10`; wheels exist through 3.13).
+4. scikit-learn/numpy ABI conflict is moot — scikit-learn was already removed from runtime dependencies entirely (see the numpy/scikit-learn section below); inference no longer touches scikit-learn or numpy 2.x ABI surfaces at all.
+
+Verified in an isolated venv (tensorflow 2.21.0, tensorflow-probability 0.25.0, tf-keras 2.21.0) before applying pins: both shipped models load, predict, and produce mixture components numerically identical to the old TF 2.15 environment (max abs diff ~1e-8, floating-point noise from different kernel implementations). Full project test suite (8/8) passes against the bumped pins.
+
 ---
 
 ## Migration notes: numpy / scikit-learn / seaborn
