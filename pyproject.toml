@@ -11,7 +11,7 @@ license = "MIT"
 authors = [
     { name = "Philipp Baumeister", email = "philipp.baumeister@dlr.de" },
 ]
-requires-python = ">=3.9,<3.12"
+requires-python = ">=3.9,<3.11"
 dependencies = [
     # Pinned to the last release line where tf.keras still defaults to Keras 2.
     # TF>=2.16 defaults to Keras 3, which can't load the SavedModel-format

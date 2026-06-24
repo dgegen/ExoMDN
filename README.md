@@ -23,7 +23,7 @@ from the repository root run:
 uv sync
 ```
 This creates a virtual environment in `.venv` and installs the *exomdn* package along with all required dependencies.
-This project requires Python 3.9 or higher, and currently does not work well with Python versions above 3.11 due to
+This project requires Python 3.9 or higher, and currently does not work well with Python versions above 3.10 due to
 incompatibility with higher tensorflow versions; `uv sync` will automatically install a compatible Python version if needed.
 
 To run commands within the environment, prefix them with `uv run`, e.g.:
@@ -33,7 +33,7 @@ uv run jupyter notebook
 
 ### Required packages
 
-- python>=3.9,<3.12
+- python>=3.9,<3.11
 - tensorflow==2.15.*
 - tensorflow-probability==0.23.*
 - scikit-learn==1.1.1
