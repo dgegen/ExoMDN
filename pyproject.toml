@@ -18,11 +18,6 @@ dependencies = [
     # models shipped in models/ (needs tf_keras compat shim + model re-export).
     "tensorflow==2.15.*",
     "tensorflow-probability==0.23.*",
-    # Pinned because models/*/preprocessor.pkl were pickled with this exact
-    # sklearn version; sklearn gives no pickle compatibility guarantee across
-    # versions, so bumping requires re-fitting/re-pickling the preprocessors.
-    "scikit-learn==1.1.1",
-    "joblib",
     "numpy",
     "pandas",
     "scipy",
@@ -31,6 +26,13 @@ dependencies = [
     "seaborn",
     "ipywidgets",
     "setuptools",
+]
+
+[project.optional-dependencies]
+# Only needed to refit preprocessors in more_examples/model_training_demo.ipynb;
+# inference loads preprocessor.json directly and has no scikit-learn dependency.
+train = [
+    "scikit-learn",
 ]
 
 [project.urls]

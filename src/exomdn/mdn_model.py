@@ -3,7 +3,6 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 
-import joblib
 import tensorflow as tf
 from tensorflow_probability import distributions as tfd
 import exomdn.mdn_layer as mdn
@@ -13,6 +12,32 @@ from tensorflow.keras.utils import Progbar
 
 from numpy.polynomial import Polynomial
 from typing import List, Tuple, Union
+
+
+class Preprocessor:
+    """Applies a log10 transform to selected columns, then standardizes all columns.
+
+    Loaded from a plain JSON file of the parameters fitted by a sklearn
+    Pipeline(ColumnTransformer(log10) + StandardScaler) during training,
+    so inference no longer depends on unpickling a scikit-learn object
+    (which has no cross-version pickle compatibility guarantee).
+    """
+
+    def __init__(self, log_columns: List[int], mean: List[float], scale: List[float]):
+        self.log_columns = log_columns
+        self.mean = np.array(mean)
+        self.scale = np.array(scale)
+
+    @classmethod
+    def load(cls, path: Union[str, Path]) -> "Preprocessor":
+        with open(path, "r") as f:
+            params = json.load(f)
+        return cls(params["log_columns"], params["mean"], params["scale"])
+
+    def transform(self, x: np.ndarray) -> np.ndarray:
+        x = np.array(x, dtype=float)
+        x[:, self.log_columns] = np.log10(x[:, self.log_columns])
+        return (x - self.mean) / self.scale
 
 
 class Model:
@@ -30,7 +55,7 @@ class Model:
         self.input_properties = self.parameters.get("input_properties", {})
         self.output_dim = len(self.outputs)
 
-        self.preprocessor = joblib.load(self.model_path / "preprocessor.pkl")
+        self.preprocessor = Preprocessor.load(self.model_path / "preprocessor.json")
         self.keras_model = tf.keras.models.load_model(self.model_path / "model.keras",
                                                       custom_objects={"MDN": mdn.MDN,
                                                                       "mdn_loss_func": mdn.get_mixture_loss_func(

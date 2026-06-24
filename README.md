@@ -36,15 +36,22 @@ uv run jupyter notebook
 - python>=3.9,<3.11
 - tensorflow==2.15.*
 - tensorflow-probability==0.23.*
-- scikit-learn==1.1.1
 - numpy
 - pandas
 - scipy
 - matplotlib
 - seaborn
-- joblib
 - ipywidgets
 - jupyter
+
+Model preprocessing parameters are stored as plain JSON (`preprocessor.json` next to each model),
+not as a pickled scikit-learn object, so running predictions has no scikit-learn dependency.
+scikit-learn is only needed if you want to refit a preprocessor in
+`more_examples/model_training_demo.ipynb`; install it with the `train` extra:
+
+```
+uv sync --extra train
+```
 
 ## Getting started
 

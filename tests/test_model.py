@@ -1,7 +1,8 @@
 """Smoke tests for the ExoMDN prediction pipeline.
 
-Both shipped models are exercised so that the keras model and the pickled
-preprocessor (scikit-learn scaler) loading paths are covered for each.
+Both shipped models are exercised so that the keras model and the
+preprocessor (log-scale + standardize, loaded from preprocessor.json)
+loading paths are covered for each.
 """
 def test_predict_returns_expected_dataframes(exo, model_input):
     prediction, mixture_components, input_prompt = exo.predict([model_input], samples=1000)
