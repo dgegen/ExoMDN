@@ -31,10 +31,11 @@ class Model:
         self.output_dim = len(self.outputs)
 
         self.preprocessor = joblib.load(self.model_path / "preprocessor.pkl")
-        self.keras_model = tf.keras.models.load_model(self.model_path / f"model",
+        self.keras_model = tf.keras.models.load_model(self.model_path / "model.keras",
                                                       custom_objects={"MDN": mdn.MDN,
                                                                       "mdn_loss_func": mdn.get_mixture_loss_func(
-                                                                          self.output_dim, self.components)})
+                                                                          self.output_dim, self.components)},
+                                                      compile=False)
 
         print(f"Loaded model '{self.model_name}'")
         print("=" * 65)
