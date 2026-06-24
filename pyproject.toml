@@ -1,0 +1,42 @@
+[build-system]
+build-backend = "uv_build"
+requires = ["uv_build>=0.9.5,<0.10.0"]
+
+[project]
+name = "ExoMDN"
+version = "1.0.1"
+description = "Rapid characterization of exoplanet interiors with Mixture Density Networks"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Philipp Baumeister", email = "philipp.baumeister@dlr.de" },
+]
+requires-python = ">=3.9,<3.12"
+dependencies = [
+    # Pinned to the last release line where tf.keras still defaults to Keras 2.
+    # TF>=2.16 defaults to Keras 3, which can't load the SavedModel-format
+    # models shipped in models/ (needs tf_keras compat shim + model re-export).
+    "tensorflow==2.15.*",
+    "tensorflow-probability==0.23.*",
+    # Pinned because models/*/preprocessor.pkl were pickled with this exact
+    # sklearn version; sklearn gives no pickle compatibility guarantee across
+    # versions, so bumping requires re-fitting/re-pickling the preprocessors.
+    "scikit-learn==1.1.1",
+    "joblib",
+    "numpy",
+    "pandas",
+    "scipy",
+    "jupyter",
+    "matplotlib",
+    "seaborn",
+    "ipywidgets",
+    "setuptools",
+]
+
+[project.urls]
+Homepage = "https://github.com/philippbaumeister/ExoMDN"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+]

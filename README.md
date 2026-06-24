@@ -16,45 +16,27 @@ We also make available the training routines in `more_examples/model_training_de
 
 ## Installation
 
-### Using conda (preferred)
+This project uses [uv](https://docs.astral.sh/uv/) to manage its Python environment and dependencies.
+Install uv if you haven't already (see the [installation guide](https://docs.astral.sh/uv/getting-started/installation/)), then
+from the repository root run:
+```
+uv sync
+```
+This creates a virtual environment in `.venv` and installs the *exomdn* package along with all required dependencies.
+This project requires Python 3.9 or higher, and currently does not work well with Python versions above 3.11 due to
+incompatibility with higher tensorflow versions; `uv sync` will automatically install a compatible Python version if needed.
 
-Create a new conda environment named ***exomdn*** from the `environment.yml` file, which installs all the required 
-packages:
+To run commands within the environment, prefix them with `uv run`, e.g.:
 ```
-conda env create -f environment.yml
-```
-
-Activate the environment:
-```
-conda activate exomdn
-```
-
-Then install the *exomdn* package by running
-```
-pip install -e .
-```
-
-### Using pip
-
-This project requires Python 3.7 or higher.
-Currently, due to incompatibility with higher tensorflow versions, ExoMDN does not work well with Python versions above 3.11
-
-Install the required packages and dependencies using
-```
-pip install -r requirements.txt
-```
-
-Then install the *exomdn* package by running
-```
-pip install -e .
+uv run jupyter notebook
 ```
 
 ### Required packages
 
-- python>=3.7
-- tensorflow=2.11
-- tensorflow-probability=0.15
-- scikit-learn=1.1.1
+- python>=3.9,<3.12
+- tensorflow==2.15.*
+- tensorflow-probability==0.23.*
+- scikit-learn==1.1.1
 - numpy
 - pandas
 - scipy
